@@ -17,7 +17,6 @@ from tqdm import tqdm
 import collections.abc as container_abcs
 
 from pathlib import Path
-from hard_triplet import HardTripletLoss
 
 from timm.data import Mixup
 from timm.models import create_model
@@ -35,11 +34,8 @@ from samplers import RASampler
 import models
 import utils
 
-# import torchcontrib
-# from torchcontrib.optim import SWA
-
 def get_args_parser():
-    parser = argparse.ArgumentParser('ConViT training and evaluation script', add_help=False)
+    parser = argparse.ArgumentParser('Conviformer training and evaluation script', add_help=False)
     parser.add_argument('--batch-size', default=64, type=int)
     parser.add_argument('--epochs', default=300, type=int)
 

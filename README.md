@@ -24,17 +24,23 @@ conda install -c pytorch pytorch torchvision
 pip install timm==0.3.2
 ```
 
+Rest of the depenencies are provided in `requirement.txt` file.
+
 ## Data preparation
 
 Dataset is downloaded from `Kaggle Herbarium Challenge` page. We have evaluated `Conviformer` on [Herbarium 2021](https://www.kaggle.com/competitions/herbarium-2021-fgvc8) and [Herbarium 2022](https://kaggle.com/competitions/herbarium-2022-fgvc9/) dataset both of them are referred to as `Herbarium` and `Herbarium22` respectively in the code. 
 
+### PreSizer
+
+Dataset can be resized in accordance to our proposed smart resizing technique called `PreSizer`. The code for the same is provided as `presizer.py`. 
+
 ## Evaluation
 To evaluate Conviformer-Base on test set, run:
+
 ```
 ./eval.sh model_name input_size data_set checkpoint_path batch_size
 
 ```
-
 
 ## Training
 To train Conviformer-Base on Herbarium 202x on a single node with ```n_gpus``` gpus and ```batch_size``` batch size for 300 epochs run:

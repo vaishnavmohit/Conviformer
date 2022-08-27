@@ -20,8 +20,8 @@ def main():
     #setting training parameters
     
     #Load our dataset
-    train_dir = '/users/mvaishn1/scratch/datasets/herbarium-2022-fgvc9/train_images/*/*/*'
-    test_dir = '/users/mvaishn1/scratch/datasets/herbarium-2022-fgvc9/test_images/*/*'
+    train_dir = '/users/datasets/herbarium-2022-fgvc9/train_images/*/*/*'
+    test_dir = '/users/datasets/herbarium-2022-fgvc9/test_images/*/*'
     
     # list of images: 
     train_list = glob(train_dir)
