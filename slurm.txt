@@ -1,0 +1,186 @@
+######################## Herb2021 2019 ########################
+sbatch --account=carney-tserre-condo -J Herb21-base-scratch -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_inat19_base.sh 80 8 
+sbatch --account=carney-tserre-condo -J Herb21-patch-img-300 -C quadrortx -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:10 train_herbarium_patch.sh 76 10
+sbatch --account=carney-tserre-condo -J Herb21-patch-896-200 -N 1 -n 20 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herbarium_patch_896.sh 46 8
+
+sbatch --account=carney-tserre-condo -J Herb22-448-img -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 80 8 448
+
+######################## iNat 2019 ########################
+sbatch --account=carney-tserre-condo -J iNAT-patch-scratch -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_inat19_patch.sh 80 8
+sbatch --account=carney-tserre-condo -J iNAT-patch-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_inat19_patch.sh 80 8
+sbatch --account=carney-tserre-condo -J iNAT-patch-img -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_inat19_patch.sh 80 8
+
+sbatch --account=carney-tserre-condo -J iNAT-base-scratch -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_inat19_base.sh 80 8
+sbatch --account=carney-tserre-condo -J iNAT-base-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_inat19_base.sh 80 8
+sbatch --account=carney-tserre-condo -J iNAT-base-img -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_inat19_base.sh 80 8
+
+sbatch --account=carney-tserre-condo -J iNAT-448-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 80 8 448
+sbatch --account=carney-tserre-condo -J iNAT-512-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 50 8 512
+sbatch --account=carney-tserre-condo -J iNAT-512-img -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 50 8 512
+sbatch --account=carney-tserre-condo -J iNAT-600-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 30 8 600
+
+# without smart resizing:
+sbatch --account=carney-tserre-condo -J herb22-448-herb_sr -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 80 8 448
+
+# resize images
+sbatch --account=carney-tserre-condo -J herb22-448-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 80 8 448
+sbatch --account=carney-tserre-condo -J herb22-512-herb -N 1 -n 16 --mem=200G --time=100:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 50 8 512
+sbatch --account=carney-tserre-condo -J herb22-600-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 50 8 600
+sbatch -J herb22-600-herb -N 1 -n 16 --mem=200G --time=90:00:00 -p gpu-he -C v100 --gres=gpu:8 train_herb22_scale.sh 50 8 600
+
+sbatch --account=carney-tserre-condo -J herb22-patch-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 60 8 '/gpfs/data/tserre/data/mvaishn1/fossil/weights_vit/convit_base.pth' 512
+sbatch --account=carney-tserre-condo -J herb22-patch-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_scale.sh 50 8 '/gpfs/data/tserre/data/mvaishn1/fossil/weights_vit/300ep_convit_base_patch_448_herb21.pth' 600
+
+sbatch --account=carney-tserre-condo -J bird-patch-scratch -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_nabird_patch.sh 80 8
+sbatch --account=carney-tserre-condo -J bird-patch-herb -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_nabird_patch.sh 80 8
+sbatch --account=carney-tserre-condo -J bird-patch-img -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_nabird_patch.sh 80 8
+
+sbatch --account=carney-tserre-condo -J eval_bird -N 1 -n 16 --mem=50G --time=20:00:00 -p gpu --gres=gpu:1 train_nabird_patch.sh 80 1
+
+sbatch --account=carney-tserre-condo -J bird-base-scratch -N 1 -n 16 --mem=200G --time=50:00:00 -p gpu --gres=gpu:8 train_nabird_patch.sh 80 8
+sbatch --account=carney-tserre-condo -J bird-patch-herb -N 1 -n 16 --mem=200G --time=50:00:00 -p gpu --gres=gpu:8 train_nabird_patch.sh 80 8
+sbatch --account=carney-tserre-condo -J bird-patch-img -N 1 -n 16 --mem=200G --time=50:00:00 -p gpu --gres=gpu:8 train_nabird_patch.sh 80 8
+
+######################## hard triplet ########################
+**** normalization is to be done
+sbatch --account=carney-tserre-condo -J triplethier4 -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_hier4.sh 26 8
+sbatch --account=carney-tserre-condo -J triplethier3v2 -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_hier3.sh 80 8
+sbatch --account=carney-tserre-condo -J triplethier2.1 -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_hiergenus.sh 26 8
+sbatch --account=carney-tserre-condo -J triplethierspecies.1_trip.1 -N 1 -n 20 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_hiergenus.sh 26 8
+
+sbatch --account=carney-tserre-condo -J triplet21in22species.1 -N 1 -n 20 --mem=200G --time=200:00:00 -p gpu --gres=gpu:10 train_herb22_triplet.sh 26 10
+
+sbatch --account=carney-tserre-condo -J tripletgenus.1 -N 1 -n 16 --mem=200G --time=120:00:00 -p gpu --gres=gpu:8 train_herb22_tripleta.sh 26 8
+sbatch --account=carney-tserre-condo -J tripletgenus2 -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_tripleta.sh 26 8
+sbatch --account=carney-tserre-condo -J triplet2_.1loss -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herb22_triplet.sh 26 8
+sbatch -J triplet -C v100 -N 1 -n 16 --mem=200G --time=90:00:00 -p gpu-he --gres=gpu:8 train_herb22_triplet.sh 40 8 
+
+######## IMP ###########
+change dataset size and random cropping 
+#########################
+from scratch and dropout of .5
+sbatch -C v100 -J 448_cedr.1 -N 1 -n 16 --mem=200G --time=90:00:00 -p gpu-he --gres=gpu:8 train_herbarium_patch22a.sh 110 8 ../out_convit/herbarium_22/convit_base_patch/448/cedr_05-20-22-04-29/checkpoint.pth .1
+sbatch -C v100 -J 448_cedr.0 -N 1 -n 16 --mem=200G --time=90:00:00 -p gpu-he --gres=gpu:8 train_herbarium_patch22a.sh 80 8 '../out_convit/herbarium_22/convit_base_patch/448/cedr_05-19-22-08-12/checkpoint.pth' 0.
+
+sbatch --account=carney-tserre-condo -C ampere -J 448_cedr.0 -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22a.sh 80 8 '../out_convit/herbarium_22/convit_base_patch/448/cedr_05-19-22-08-12/checkpoint.pth'
+
+sbatch --account=carney-tserre-condo -J 21in22-ep300_dr0_all -N 1 -n 16 --mem=150G --time=150:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22.sh 80 8 '../out_convit/herbarium_22/convit_base_patch/448/cedr_05-22-22-08-32/checkpoint.pth'
+
+sbatch --account=carney-tserre-condo -J 21in22-ep300_dr1_all -N 1 -n 16 -C ampere --mem=150G --time=150:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22a.sh 80 8 ../out_convit/herbarium_22/convit_base_patch/448/cedr_05-20-22-03-54/checkpoint.pth .1
+sbatch --account=carney-tserre-condo -J 21in22-st_dr1 -N 1 -n 16 -C ampere --mem=150G --time=150:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22a.sh 80 8 ../out_convit/herbarium_22/convit_base_patch/448/cedr_05-26-22-10-42/checkpoint.pth .1
+
+sbatch --account=carney-tserre-condo -J 21in22-ep300_dr1 -N 1 -n 16 --mem=150G --time=150:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22.sh 80 8 ../out_convit/herbarium_22/convit_base_patch/448/cedr_05-20-22-04-37/checkpoint.pth .1
+
+sbatch --account=carney-tserre-condo -J 21in22-st_dr3 -N 1 -n 16 -C ampere --mem=150G --time=200:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22a.sh 80 8 
+
+#ldam:
+srun -J convit-ldam -N 1 -n 10 --mem=120G --time=90:00:00 -p gpu-he -C ampere --gres=gpu:4 train_herbarium_patch22ldama.sh 180 4 
+sbatch --account=carney-tserre-condo -J convitdrop-ldam -N 1 -n 16 --mem=150G --time=90:00:00 -p gpu -C ampere --gres=gpu:8 train_herbarium_patch22ldama.sh 80 8 
+
+
+# testing:
+sbatch --account=carney-tserre-condo -J convit-test -N 1 -n 4 --mem=50 --time=7:00:00 -p gpu --gres=gpu:1 train_herbarium22_test.sh ../herbarium2022weight/avgwt/base448_fullhierrandcrop_4764444.pth
+sbatch --account=carney-tserre-condo -J convit-test -N 1 -n 4 --mem=50 --time=7:00:00 -p gpu --gres=gpu:1 train_herbarium22_test.sh ../herbarium2022weight/avgwt/ce_alltrain_4166593.pth
+sbatch --account=carney-tserre-condo -J convit-test -N 1 -n 4 --mem=50 --time=7:00:00 -p gpu --gres=gpu:1 train_herbarium22_test.sh ../herbarium2022weight/avgwt/convit-base448_fullhiersmoothing_4586679.pth
+sbatch --account=carney-tserre-condo -J convit-test -N 1 -n 4 --mem=50 --time=7:00:00 -p gpu --gres=gpu:1 train_herbarium22_test.sh ../herbarium2022weight/avgwt/convit-base448_fullhiersmoothing_4722166.pth
+sbatch --account=carney-tserre-condo -J convit-test -N 1 -n 4 --mem=50 --time=7:00:00 -p gpu --gres=gpu:1 train_herbarium22_test.sh ../herbarium2022weight/avgwt/convit_base_patch_hier_4639253.pth
+sbatch --account=carney-tserre-condo -J convit-test -N 1 -n 4 --mem=50 --time=7:00:00 -p gpu --gres=gpu:1 train_herbarium22_test.sh ../herbarium2022weight/avgwt/convit-refine_ep253ce-trp_ce_4465761.pth
+sbatch --account=carney-tserre-condo -J convit-test -N 1 -n 4 --mem=50 --time=7:00:00 -p gpu --gres=gpu:1 train_herbarium22_test.sh ../herbarium2022weight/avgwt/convit-trpall_4531982.pth
+sbatch --account=carney-tserre-condo -J convit-test -N 1 -n 4 --mem=50 --time=7:00:00 -p gpu --gres=gpu:1 train_herbarium22_test.sh ../herbarium2022weight/avgwt/triplet_allfine_4454572.pth
+srun -J convit-test -N 1 -n 4 --mem=90 --time=7:00:00 -p gpu --gres=gpu:1 train_herbarium22_test.sh ../herbarium2022weight/avgwt/triplet_allfine_4454572.pth
+
+
+
+# convit base
+sbatch --account=carney-tserre-condo -J convit-base224_ce -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herbarium_base.sh 100 8 
+sbatch --account=carney-tserre-condo -C ampere -J convit-base224_ce -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herbarium_base.sh 100 8 
+sbatch --account=carney-tserre-condo -C ampere -J convit-base224_ce -N 1 -n 10 --mem=100G --time=200:00:00 -p gpu --gres=gpu:4 train_herbarium_base.sh 100 4
+
+# herbarium 2022
+sbatch --account=carney-tserre-condo -J convit-base-patch448_ce -N 1 -n 16 --mem=200G --time=100:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22.sh 80 8 ../out_convit/herbarium_22/convit_base_patch/448/ce_02-28-22-04-05/checkpoint.pth
+### change the dataset to the full length instead 90/10
+sbatch --account=carney-tserre-condo -C ampere -J convit-base-patch448_cefull -N 1 -n 16 --mem=200G --time=100:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22a.sh 80 8
+sbatch --account=carney-tserre-condo -C ampere -J convit-base-patch448_cefull -N 1 -n 8 --mem=100G --time=100:00:00 -p gpu --gres=gpu:4 train_herbarium_patch22a.sh 80 4 ../out_convit/herbarium_22/convit_base_patch/448/ce_02-28-22-04-05/checkpoint.pth
+
+sbatch -C v100 -J convit-base-patch448_ce -N 1 -n 16 --mem=200G --time=90:00:00 -p gpu-he --gres=gpu:8 train_herbarium_patch22.sh 80 8 ../out_convit/herbarium_22/convit_base_patch/448/ce_02-27-22-12-13/checkpoint.pth
+
+### LDAM loss
+sbatch --account=carney-tserre-condo -J convit-labelcount_LDAM -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22ldama.sh 80 8 
+
+sbatch --account=carney-tserre-condo -J convit-base-patch448_ldam -N 1 -n 16 --mem=220G --time=200:00:00 -p gpu --gres=gpu:10 train_herbarium_patch22ldam.sh 80 10 
+sbatch --account=carney-tserre-condo -J convit-base-noweight_ldam -N 1 -n 20 --mem=220G --time=200:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22ldam.sh 90 8 
+sbatch --account=carney-tserre-condo -C ampere -J convit-base-patch448_ldam -N 1 -n 16 --mem=200G --time=150:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22ldama.sh 80 8 
+sbatch --account=carney-tserre-condo -J convit-base-clsnmlst_ldam -N 1 -n 16 --mem=200G --time=100:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22ldam.sh 80 8 
+
+sbatch --account=carney-tserre-condo -J convit-base-noweight_ldam -N 1 -n 8 --mem=100G --time=100:00:00 -p gpu --gres=gpu:4 train_herbarium_patch22ldam.sh 80 4
+
+### Hierarchical cross entropy loss:
+sbatch -C v100 -J convit-base448_fullhiersmoothing -N 1 -n 16 --mem=200G --time=90:00:00 -p gpu-he --gres=gpu:8 train_herbarium_patch22hier.sh 110 8
+sbatch --account=carney-tserre-condo -C ampere -J convit-base448_ema_randomcrop -N 1 -n 8 --mem=100G --time=100:00:00 -p gpu --gres=gpu:4 train_herbarium_patch22hier.sh 80 4 
+sbatch --account=carney-tserre-condo -C ampere -J scratch-hier -N 1 -n 16 --mem=200G --time=120:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22hier.sh 76 8 
+
+sbatch --account=carney-tserre-condo -C quadrortx -J convit-base448_hier -N 1 -n 20 --mem=220G --time=200:00:00 -p gpu --gres=gpu:10 train_herbarium_patch22hier.sh 80 10 
+sbatch -C v100 -J convit-base448_hier -N 1 -n 16 --mem=200G --time=90:00:00 -p gpu-he --gres=gpu:8 train_herbarium_patch22hier.sh 110 8 ../out_convit/herbarium_22/convit_base_patch_hier/448/hier2_03-13-22-08-22/checkpoint.pth
+sbatch --account=carney-tserre-condo -C ampere -J convit-base448_hier -N 1 -n 16 --mem=200G --time=150:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22hier.sh 70 8 
+sbatch --account=carney-tserre-condo -J convit-base448_hier_nosmoothing -N 1 -n 16 --mem=200G --time=150:00:00 -p gpu --gres=gpu:8 train_herbarium_patch22hier.sh 70 8 
+sbatch --account=carney-tserre-condo -J convit-base448_hier_finetune -N 1 -n 10 --mem=100G --time=100:00:00 -p gpu --gres=gpu:4 train_herbarium_patch22hier.sh 70 4 
+
+
+# patch based:
+train_herbarium_patch.sh 130 1 for he and 100 for condo --> 448 embed_dim
+70 for he and 50 for condo --> 896 dim
+########### correct function on main.py file line 273 not mixup_active:
+sbatch -C v100 -J convit-base-patch -N 1 -n 11 --mem=200G --time=80:00:00 -p gpu-he --gres=gpu:8 train_herbarium_patch.sh 130 8 
+sbatch --account=carney-tserre-condo -C quadrortx -J convit-base-patch -N 1 -n 16 --mem=250G --time=150:00:00 -p gpu --gres=gpu:10 train_herbarium_patch.sh 90 10 
+
+sbatch --account=carney-tserre-condo -C quadrortx -J convit-base-patch896 -N 1 -n 16 --mem=200G --time=200:00:00 -p gpu --gres=gpu:10 train_herbarium_patch_896.sh 46 10 ../out_convit/herbarium_he/convit_base_patch/03-02-22-12-58/checkpoint.pth
+sbatch -C v100 -J convit-base-patch896 -N 1 -n 16 --mem=200G --time=90:00:00 -p gpu-he --gres=gpu:8 train_herbarium_patch_896.sh 70 8 ../out_convit/herbarium_he/convit_base_patch/03-02-22-12-58/checkpoint.pth
+sbatch --account=carney-tserre-condo -C quadrortx -J convit-base-patch448 -N 1 -n 20 --mem=250G --time=200:00:00 -p gpu --gres=gpu:10 train_herbarium_patch.sh 80 10 ../out_convit/herbarium_he/convit_base_patch/448/01-30-22-23-47/checkpoint.pth
+sbatch -C v100 -J convit-base-patch448 -N 1 -n 20 --mem=250G --time=90:00:00 -p gpu-he --gres=gpu:8 train_herbarium_patch.sh 116 8 ../out_convit/herbarium_he/convit_base_patch/448/01-21-22-02-36/checkpoint.pth
+
+# training herbarium:
+sbatch -C ampere -J convit-herb -N 1 -n 10 --mem=200G --time=80:00:00 -p gpu-he --gres=gpu:8 train_herbarium_ampere.sh 70 8
+
+sbatch --account=carney-tserre-condo -C quadrortx -J convit-herb -N 1 -n 16 --mem=150G --time=80:00:00 -p gpu --gres=gpu:8 train_herbarium_condo.sh 50 8
+
+# conv_base
+sbatch --account=carney-tserre-condo -C quadrortx -J convit-base-herb -N 1 -n 16 --mem=250G --time=150:00:00 -p gpu --gres=gpu:10 train_herbarium_condo.sh 32 10 ../out_convit/herbarium_condo/convit_base/01-01-22-12-40/checkpoint.pth convit_base
+
+sbatch --account=carney-tserre-condo -C quadrortx -J convit-herb -N 1 -n 16 --mem=150G --time=150:00:00 -p gpu --gres=gpu:10 train_herbarium_condo.sh 50 10 ../out_convit/herbarium_condo/convit_small/12-23-21-20-47/checkpoint.pth
+
+
+sbatch -C v100 -J convit-herb -N 1 -n 11 --mem=200G --time=80:00:00 -p gpu-he --gres=gpu:8 train_herbarium_he.sh 70 8 ../out_convit/herbarium_he/convit_small/12-23-21-17-14/checkpoint.pth
+
+sbatch -C v100 -J convit-herb-test -N 1 -n 5 --mem=70G --time=8:00:00 -p gpu-he --gres=gpu:1 train_herbarium_test.sh 
+
+interact -q gpu -g 5  -n 10 -t 2:30:00 -m 50G -a carney-tserre-condo -f quadrortx
+
+
+sbatch --account=carney-tserre-condo -C quadrortx -J vit-herbarium -N 1 -n 15 --mem=100G --time=100:00:00 -p gpu --gres=gpu:5 train_herbarium_condo.sh 300 5 ../out_deit/herbarium_condo/deit_small_patch16_224/checkpoint.pth
+
+sbatch --account=carney-tserre-condo -C quadrortx -J convit-herb -N 1 -n 24 --mem=200G --time=50:00:00 -p gpu --gres=gpu:8 train_herbarium_condo.sh 30 8
+
+sbatch --account=carney-tserre-condo -C quadrortx -J vit-herbarium -N 1 -n 24 --mem=200G --time=200:00:00 -p gpu --gres=gpu:8 train_herbarium.sh 150 8
+
+sbatch --account=carney-tserre-condo -C quadrortx -J vit-herbarium -N 1 -n 20 --mem=200G --time=200:00:00 -p gpu --gres=gpu:10 train_herbarium_ampere.sh 150 10
+sbatch -J vit-herbarium -N 1 -n 24 --mem=150G --time=50:00:00 -p gpu-he --gres=gpu:8 train_herbarium_ampere.sh 200 8 --> not working now
+
+# ampere -> 300 per gpu
+--dependency=afterany:3411100 
+sbatch -J vit-herbarium -N 1 -n 8 --mem=150G --time=99:00:00 -p gpu-he --gres=gpu:4 train_herbarium_ampere.sh 1200 4
+sbatch -J vit-herbarium -N 1 -n 24 --mem=200G -C v100 --time=50:00:00 -p gpu-he --gres=gpu:8 train_herbarium.sh 200 8 deit_base_patch16_224 ../out_deit/herbarium_he/deit_base_patch16_224/checkpoint.pth
+sbatch -J vit-herbarium -N 1 -n 24 --mem=200G -C v100 --time=90:00:00 -p gpu-he --gres=gpu:8 train_herbarium.sh 450 8
+
+sbatch -J vit-herbarium -N 1 -n 16 --mem=100G -C v100 --time=90:00:00 -p gpu-he --gres=gpu:4 train_herbarium.sh 200 4
+
+
+srun -J vit-herbarium -N 1 -n 20 -e ../slurm/vit/%j.err -o ../slurm/vit/%j.out --mail-user=mohit_vaishnav@brown.edu --mail-type=ALL --mem=200G -C v100 --time=50:00:00 -p gpu-he --gres=gpu:8 train_herbarium.sh 200 8
+
+sbatch -J vit-herbarium -N 1 -n 8 --mem=150G --time=99:00:00 -p gpu-he --gres=gpu:4 train_herbarium.sh 256 4
+sbatch --account=carney-tserre-condo -C quadrortx -J vit-herbarium -N 1 -n 8 --mem=100G --time=100:00:00 -p gpu --gres=gpu:4 train_herbarium.sh 256 4
+
+sbatch --account=carney-tserre-condo -C quadrortx -J vit-herbarium -N 1 -n 16 --mem=150G --time=200:00:00 -p gpu --gres=gpu:8 train_herbarium.sh 30 8
+
+sbatch -J vit-herbarium -N 1 -n 16 --mem=200G --time=100:00:00 -p gpu-he --gres=gpu:8 train_vit.sh deit_small_patch16_224 80 2 2 '2M'
+sbatch --account=  -C quadrortx -J vit-herbarium -N 1 -n 20 --mem=200G --time=100:00:00 -p gpu --gres=gpu:10 train_vit.sh deit_base_distilled_patch16_224 32
+
