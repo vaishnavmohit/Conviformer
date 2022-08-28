@@ -22,7 +22,7 @@ For details see the [Conviformer paper](https://arxiv.org/abs/2208.08900) by Moh
 Here we show a examples from fina-grained classification task to demonstrate the need for higher resolution images. There exists a very high level of similarity between species of different sub-class and high variation between samples of the same sub-class. Such distinctions are often lost as we downscale the image to save the memory and computational cost associated with vision transformers (ViT). 
 
 <p align="center">
-    <img src="image/fine-grained2.png" width="300" title="Resolution">
+    <img src="image/fine-grained2.png" width="400" title="Resolution">
 </p>
 
 
@@ -48,7 +48,7 @@ Dataset can be resized in accordance to our proposed smart resizing technique ca
 Two representative examples showing resizing-preserving. (a) Initial image from the Herbarium dataset. (b) Resizing the image when padding equally on both sides. When we follow equal padding around the sides, we lose relevant content. (c) Resizing the image following the PreSizer technique in which we remove the boundary pixels of width 20 pixels from all the sides and append the mirror reflection of the image to make it square
 
 <p align="center">
-    <img src="image/presizer.png" width="300" title="PreSizer">
+    <img src="image/presizer.png" width="400" title="PreSizer">
 </p>
 
 
