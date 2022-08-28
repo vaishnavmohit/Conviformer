@@ -72,7 +72,7 @@ Similarly, for baseline reproducibility you may follow the above steps with
 ./train_herbarium_base batch_size n_gpus 
 ``` 
 
-# Citation
+## Citation
 
 If you use this code for a paper please cite:
 
@@ -85,5 +85,5 @@ If you use this code for a paper please cite:
 }
 ```
 
-# License
+## License
 The majority of this repository is released under the Apache 2.0 license as found in the [LICENSE](LICENSE) file.
