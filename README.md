@@ -17,7 +17,7 @@ Convolutional block used to reduce the dimensional is as shown below:
 
 For details see the [Conviformer paper](https://arxiv.org/abs/2208.08900) by Mohit Vaishnav, Thomas Fel, Ivan Felipe Rodrıguez, Thomas Serre.
 
-## Necessity for higher resolution
+### Necessity for higher resolution
 
 Here we show a examples from fina-grained classification task to demonstrate the need for higher resolution images. There exists a very high level of similarity between species of different sub-class and high variation between samples of the same sub-class. Such distinctions are often lost as we downscale the image to save the memory and computational cost associated with vision transformers (ViT). 
 
@@ -26,7 +26,7 @@ Here we show a examples from fina-grained classification task to demonstrate the
 </p>
 
 
-# Usage
+## Usage
 
 Install PyTorch 1.7.0+ and torchvision 0.8.1+ and [pytorch-image-models 0.3.2](https://github.com/rwightman/pytorch-image-models):
 
@@ -71,6 +71,8 @@ Similarly, for baseline reproducibility you may follow the above steps with
 ```
 ./train_herbarium_base batch_size n_gpus 
 ``` 
+
+# Citation
 
 If you use this code for a paper please cite:
 
