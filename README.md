@@ -4,11 +4,13 @@ This repository contains PyTorch code for Conviformer with ConViT base. But this
 
 Here is an architecture of the model:
 
-![Conviformer](image/model.png)
+<p align="center">
+    <img src="image/model.png" width="50" height="60" title="Conviformer">
+</p>
 
 Convolutional block used to reduce the dimensional is as shown below:
 
-![Conviformer](image/conv.png)
+![Convolutional block](image/conv.png)
 
 For details see the [Conviformer paper](https://arxiv.org/abs/2208.08900) by Mohit Vaishnav, Thomas Fel, Ivan Felipe Rodrıguez, Thomas Serre.
 
