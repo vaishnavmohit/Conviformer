@@ -2,18 +2,21 @@
 
 This repository contains PyTorch code for Conviformer with ConViT base. But this is generic approach and can be applied with any vision transformer. 
 
+Here is an architecture of the model:
+
+![Conviformer](image/model.png)
+
+Convolutional block used to reduce the dimensional is as shown below:
+
+![Conviformer](image/conv.png)
+
 For details see the [Conviformer paper](https://arxiv.org/abs/2208.08900) by Mohit Vaishnav, Thomas Fel, Ivan Felipe Rodrıguez, Thomas Serre.
 
-If you use this code for a paper please cite:
+## Necessity for higher resolution
 
-```
-@article{vaishnav2022conviformers,
-  title={Conviformers: Convolutionally guided Vision Transformer},
-  author={Vaishnav, Mohit and Fel, Thomas and Rodr{\i}guez, Ivan Felipe and Serre, Thomas},
-  journal={arXiv preprint arXiv:2208.08900},
-  year={2022}
-}
-```
+Here we show a examples from fina-grained classification task to demonstrate the need for higher resolution images. There exists a very high level of similarity between species of different sub-class and high variation between samples of the same sub-class. Such distinctions are often lost as we downscale the image to save the memory and computational cost associated with vision transformers (ViT). 
+
+![Resolution](image/fine-grained2.png)
 
 # Usage
 
@@ -34,6 +37,10 @@ Dataset is downloaded from `Kaggle Herbarium Challenge` page. We have evaluated 
 
 Dataset can be resized in accordance to our proposed smart resizing technique called `PreSizer`. The code for the same is provided as `presizer.py`. 
 
+Two representative examples showing resizing-preserving. (a) Initial image from the Herbarium dataset. (b) Resizing the image when padding equally on both sides. When we follow equal padding around the sides, we lose relevant content. (c) Resizing the image following the PreSizer technique in which we remove the boundary pixels of width 20 pixels from all the sides and append the mirror reflection of the image to make it square
+
+![PreSizer](image/presizer.png)
+
 ## Evaluation
 To evaluate Conviformer-Base on test set, run:
 
@@ -53,6 +60,17 @@ Similarly, for baseline reproducibility you may follow the above steps with
 ```
 ./train_herbarium_base batch_size n_gpus 
 ``` 
+
+If you use this code for a paper please cite:
+
+```
+@article{vaishnav2022conviformers,
+  title={Conviformers: Convolutionally guided Vision Transformer},
+  author={Vaishnav, Mohit and Fel, Thomas and Rodr{\i}guez, Ivan Felipe and Serre, Thomas},
+  journal={arXiv preprint arXiv:2208.08900},
+  year={2022}
+}
+```
 
 # License
 The majority of this repository is released under the Apache 2.0 license as found in the [LICENSE](LICENSE) file.
