@@ -1,53 +1,96 @@
-import os
-import numpy as np
-from os.path import isfile, isdir
-from tqdm import tqdm
-# import tensorflow as tf
-from glob import glob
-from os.path import normpath, basename
-import math
-from pathlib import Path
 import argparse
-import cv2
+import logging
+import os
+import os.path
 import sys
+from multiprocessing import Pool
 
-def main():
-    
-    # print command line arguments
-    for args in sys.argv[1:]:
-        print(args)
+# import tensorflow as tf
+import cv2
+import numpy as np
+from tqdm import tqdm
 
-    #setting training parameters
-    
-    #Load our dataset
-    train_dir = '/users/datasets/herbarium-2022-fgvc9/train_images/*/*/*'
-    test_dir = '/users/datasets/herbarium-2022-fgvc9/test_images/*/*'
-    
-    # list of images: 
-    train_list = glob(train_dir)
-    test_list = glob(test_dir)
+_logger = logging.getLogger(__name__)
 
-    for f in tqdm(train_list+test_list):
-        # read image
-        src = cv2.imread(f)        
-        borderType = cv2.BORDER_REFLECT_101
-        # get the h and w
-        h,w = src.shape[:2]
-        src = src[20:h-20,20: w-20, :]
-        save = f.replace('herbarium-2022-fgvc9', 'herbarium-2022-fgvc9_resize')
-        basepath,_ = os.path.split(save)
-        Path(basepath).mkdir(parents=True, exist_ok=True)
-        if h > w:
-            right = h-w
-            image = cv2.copyMakeBorder(src, 0, 0, 0, right, borderType)
-        elif w > h:
-            top = w-h
-            image = cv2.copyMakeBorder(src, top, 0, 0, 0, borderType)
-        else:
-            image = src
-        
-        # save image:
-        cv2.imwrite(save, image)
+IN_DIR = "/data/pinto/rbge-dh-project/"
+IN_FILELIST = "/data/pinto/rbge-dh-project/valid-images"
+OUT_DIR = "/data/pinto/rbge-dh-project/images-resized/"
+
+
+def resize_image(fpaths):
+    # Ideally we would take 2 separate args but then we would need to
+    # use Pool.starmap instead of Pool.imap and Pool.starmap does not
+    # play well with tqdm.
+    in_fpath, out_fpath = fpaths
+    src = cv2.imread(in_fpath)
+    if src is None:
+        _logger.warn("Failed to cv2.imread '%s' so skipping it", in_fpath)
+        return
+    borderType = cv2.BORDER_REFLECT_101
+    # get the h and w
+    h, w = src.shape[:2]
+    src = src[20 : h - 20, 20 : w - 20, :]
+    if h > w:
+        right = h - w
+        image = cv2.copyMakeBorder(src, 0, 0, 0, right, borderType)
+    elif w > h:
+        top = w - h
+        image = cv2.copyMakeBorder(src, top, 0, 0, 0, borderType)
+    else:
+        image = src
+
+    # save image:
+    cv2.imwrite(out_fpath, image)
+
+
+def main(argv):
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--n-procs",
+        type=int,
+        help="Number of concurrent processes to use (images are split between the processes).  Defaults to Python's os.cpucount.",
+    )
+    parser.add_argument(
+        "--in-dir",
+        help="Directory to which file paths are relative to (defaults to current/working directory)",
+    )
+    parser.add_argument(
+        "out_dir",
+        help="Directory where to save resized images",
+    )
+    parser.add_argument(
+        "in_filelist",
+        help="File with one filepath (relative to IN-DIR) per line.",
+    )
+    args = parser.parse_args(argv[1:])
+
+    in_dir = args.in_dir if args.in_dir else os.curdir
+    out_dir = args.out_dir
+
+    os.makedirs(out_dir, exist_ok=True)
+
+    starmap_args = []
+    with open(args.in_filelist, "r") as fh:
+        for line in fh:
+            rel_fpath = line.strip()
+            starmap_args.append(
+                (
+                    os.path.join(in_dir, rel_fpath),
+                    os.path.join(out_dir, os.path.basename(rel_fpath)),
+                )
+            )
+
+    with Pool(args.n_procs) as pool:
+        # We use imap instead of starmap because tqdm does not play
+        # easily with starmap.
+        for _ in tqdm(
+            pool.imap_unordered(resize_image, starmap_args),
+            total=len(starmap_args),
+        ):
+            pass
+
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main(sys.argv))
