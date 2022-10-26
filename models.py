@@ -78,7 +78,7 @@ def convit_base(pretrained=False, **kwargs):
         model.load_state_dict(checkpoint)
     return model
 
-def load_state_dict(model, ckpt):
+def load_state_dict(model, ckpt, in_fc=15501):
     out_fc = 64500
     num_ftrs = model.head.in_features
     model.head = nn.Linear(num_ftrs, out_fc)
@@ -93,9 +93,10 @@ def load_state_dict(model, ckpt):
         else:
             new_state_dict[k] = v
     # import pdb; pdb.set_trace()
+    # del new_state_dict['patch_embed.proj.weight'], new_state_dict['patch_embed.proj.bias']
     model.load_state_dict(new_state_dict, strict = True)
     print('loading checkpoints weights \n')
-    model.head = nn.Linear(num_ftrs, 15501)
+    model.head = nn.Linear(num_ftrs, in_fc)
     del checkpoint, state_dict, new_state_dict
 
     return model

@@ -187,28 +187,6 @@ def get_args_parser():
 
     return parser
 
-def load_state_dict(model, ckpt, in_fc):
-    out_fc = 64500
-    num_ftrs = model.head.in_features
-    model.head = nn.Linear(num_ftrs, out_fc)
-    state_dict = torch.load(ckpt, map_location='cpu')["model"]
-    # removing module if saved in lightning mode:
-    new_state_dict = OrderedDict()
-    for k, v in state_dict.items():
-        if 'model' in k:
-            name = k[6:] # remove `model.`
-            new_state_dict[name] = v
-        else:
-            new_state_dict[k] = v
-    # import pdb; pdb.set_trace()
-    # del new_state_dict['patch_embed.proj.weight'], new_state_dict['patch_embed.proj.bias']
-    model.load_state_dict(new_state_dict, strict = True)
-    print('loading checkpoints weights \n')
-    model.head = nn.Linear(num_ftrs, in_fc)
-    del state_dict, new_state_dict
-
-    return model
-
 def main(args):
     utils.init_distributed_mode(args)
 
