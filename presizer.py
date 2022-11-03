@@ -12,10 +12,6 @@ from tqdm import tqdm
 
 _logger = logging.getLogger(__name__)
 
-IN_DIR = "/data/pinto/rbge-dh-project/"
-IN_FILELIST = "/data/pinto/rbge-dh-project/valid-images"
-OUT_DIR = "/data/pinto/rbge-dh-project/images-resized/"
-
 
 def resize_image(fpaths):
     # Ideally we would take 2 separate args but then we would need to
@@ -65,20 +61,25 @@ def main(argv):
     args = parser.parse_args(argv[1:])
 
     in_dir = args.in_dir if args.in_dir else os.curdir
-    out_dir = args.out_dir
 
+    out_dir = args.out_dir
     os.makedirs(out_dir, exist_ok=True)
 
     starmap_args = []
+    required_out_dirs = set()
     with open(args.in_filelist, "r") as fh:
         for line in fh:
             rel_fpath = line.strip()
-            starmap_args.append(
-                (
-                    os.path.join(in_dir, rel_fpath),
-                    os.path.join(out_dir, os.path.basename(rel_fpath)),
-                )
-            )
+            in_fpath = os.path.join(in_dir, rel_fpath)
+            out_fpath = os.path.join(out_dir, rel_fpath)
+            required_out_dirs.add(os.path.dirname(out_fpath))
+            starmap_args.append((in_fpath, out_fpath))
+
+    # Build the directory structure on main process and ahead of time
+    # so that we don't have to check it all the time in the workers
+    # (and avoid possible race conditions).
+    for required_out_dir in required_out_dirs:
+        os.makedirs(required_out_dir, exist_ok=True)
 
     with Pool(args.n_procs) as pool:
         # We use imap instead of starmap because tqdm does not play
