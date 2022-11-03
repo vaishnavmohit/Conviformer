@@ -681,7 +681,7 @@ def build_dataset(is_train, args):
             print('Wrong Dataset')
             exit()
     
-    elif args.data_set == 'Herbarium22':
+    elif args.data_set in ['Herbarium22', 'Herbarium22_raw']:
         Base_DIR = "/users/mvaishn1/scratch/datasets/herbarium-2022-fgvc9_resize/"
         train_dir = Base_DIR + "train_images/"
         with open(Base_DIR + 'train_metadata.json', "r", encoding="ISO-8859-1") as file:
@@ -713,10 +713,13 @@ def build_dataset(is_train, args):
         print(nb_classes)
         X_Train, Y_Train = df['image_dir'].values, le.transform(df['category_id'].values)
         # le.inverse_transform([0, 0, 1, 2]) --> inverse transform
-        if args.triplet:
-            train_full_data = GetDataTriplet(train_dir, X_Train, Y_Train, transform, df.index.values)
-        else:
-            train_full_data = GetData(train_dir, X_Train, Y_Train, transform)
+        if args.data_set == 'Herbarium22_raw':
+            train_full_data = GetData_raw(train_dir, X_Train, Y_Train, transform)
+        else:  # args.data_set == 'Herbarium22'
+            if args.triplet:
+                train_full_data = GetDataTriplet(train_dir, X_Train, Y_Train, transform, df.index.values)
+            else:
+                train_full_data = GetData(train_dir, X_Train, Y_Train, transform)
 
         train_idx, val_idx = train_test_split(list(range(len(train_full_data))), test_size=.12, stratify=Y_Train)
         print(len(val_idx))
@@ -729,7 +732,10 @@ def build_dataset(is_train, args):
         val_data = Subset(train_full_data, val_idx)
 
         # TEST DATA:
-        Base_DIR = "/cifs/data/tserre_lrs/projects/prj_fossils/data/raw_data/herbarium-2022-fgvc9_resize/"
+        if args.data_set == 'Herbarium22_raw':
+            Base_DIR = "/users/mvaishn1/scratch/datasets/herbarium-2022-fgvc9/"
+        else:  # args.data_set == 'Herbarium22'
+            Base_DIR = "/cifs/data/tserre_lrs/projects/prj_fossils/data/raw_data/herbarium-2022-fgvc9_resize/"
         test_dir = Base_DIR + "test_images/"
         with open(Base_DIR + 'test_metadata.json', "r", encoding="ISO-8859-1") as file:
             test_meta = json.load(file)
@@ -755,67 +761,6 @@ def build_dataset(is_train, args):
         else:
             print('Wrong Dataset')
             exit()
-
-    elif args.data_set == 'Herbarium22_raw':
-        Base_DIR = "/users/mvaishn1/scratch/datasets/herbarium-2022-fgvc9_resize/"
-        train_dir = Base_DIR + "train_images/"
-        with open(Base_DIR + 'train_metadata.json', "r", encoding="ISO-8859-1") as file:
-            train_meta = json.load(file)
-        image_ids = [image["image_id"] for image in train_meta["images"]]
-        image_dirs = [train_dir + image['file_name'] for image in train_meta["images"]]
-        category_ids = [annotation['category_id'] for annotation in train_meta['annotations']]
-        genus_ids = [annotation['genus_id'] for annotation in train_meta['annotations']]
-
-        df = pd.DataFrame({
-                            "image_id" : image_ids,
-                            "image_dir" : image_dirs,
-                            "category_id" : category_ids,
-                            "genus" : genus_ids})
-
-        nb_classes = len(df['category_id'].value_counts())
-        le = preprocessing.LabelEncoder()
-        le.fit(df['category_id'].values)
-        
-        print(nb_classes)
-        X_Train, Y_Train = df['image_dir'].values, le.transform(df['category_id'].values)
-        
-        train_full_data = GetData_raw(train_dir, X_Train, Y_Train, transform)
-
-        train_idx, val_idx = train_test_split(list(range(len(train_full_data))), test_size=.12, stratify=Y_Train)
-        print(len(val_idx))
-        print(len(train_idx))
-
-        train_data = Subset(train_full_data, train_idx) 
-        val_data = Subset(train_full_data, val_idx)
-
-        # TEST DATA:
-        Base_DIR = "/users/mvaishn1/scratch/datasets/herbarium-2022-fgvc9/"
-        test_dir = Base_DIR + "test_images/"
-        with open(Base_DIR + 'test_metadata.json', "r", encoding="ISO-8859-1") as file:
-            test_meta = json.load(file)
-        test_ids = [image['image_id'] for image in test_meta]
-        test_dirs = [test_dir + image['file_name'] for image in test_meta]
-        df_test = pd.DataFrame({
-                                "test_id" : test_ids,
-                                "test_dir" : test_dirs
-                            })
-        # print(len(df_test))
-        NUM_CL_test = len(df_test['test_dir'].value_counts())
-        print(NUM_CL_test)
-        X_Test = df_test['test_dir'].values
-        Y_Test = None
-        test_data =GetDataTest(test_dir, X_Test, Y_Test, transform, df_test['test_id'].values)
-
-        if is_train=='train':
-            dataset = train_data
-        elif is_train=='val':
-            dataset = val_data
-        elif is_train=='test':
-            dataset = test_data
-        else:
-            print('Wrong Dataset')
-            exit()
-    
 
     elif args.data_set == 'Herbarium22hier':
         Base_DIR = "/users/mvaishn1/scratch/datasets/herbarium-2022-fgvc9_resize/"

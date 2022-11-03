@@ -21,64 +21,62 @@ class block_resnet(nn.Module):
 
         # Inputs to hidden layer linear transformation
         self.backbone = nn.Sequential(*list(torchvision.models.resnet50(pretrained=pretrained).children())[:-2])
-        
+
     def forward(self, x):
         # Pass the input tensor through each of our operations
         x = self.backbone(x) # input = 1024
-        
+
         return x
+
+def create_convit_model(num_heads, model_cls, pretrained, ckpt_url, **kwargs):
+    kwargs['embed_dim'] *= num_heads
+    model = model_cls(
+        num_heads=num_heads,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        **kwargs,
+    )
+    model.default_cfg = _cfg()
+    if pretrained:
+        checkpoint = torch.hub.load_state_dict_from_url(
+            url=ckpt_url, map_location="cpu", check_hash=True
+        )
+        model.load_state_dict(checkpoint)
+    return model
+
 
 @register_model
 def convit_tiny(pretrained=False, **kwargs):
-    num_heads = 4
-    kwargs['embed_dim'] *= num_heads
-    model = VisionTransformer(
-        num_heads=num_heads, hybrid_backbone=block_resnet(),
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
-    model.default_cfg = _cfg()
-    if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="https://dl.fbaipublicfiles.com/convit/convit_tiny.pth",
-            map_location="cpu", check_hash=True
-        )
-        model.load_state_dict(checkpoint)
-    return model
+    kwargs['hybrid_backbone'] = block_resnet()
+    return create_convit_model(
+        num_heads=4,
+        model_cls=VisionTransformer,
+        pretrained=pretrained,
+        ckpt_url="https://dl.fbaipublicfiles.com/convit/convit_tiny.pth",
+        **kwargs,
+    )
 
 @register_model
 def convit_small(pretrained=False, **kwargs):
-    num_heads = 9
-    kwargs['embed_dim'] *= num_heads
-    model = VisionTransformer(
-        num_heads=num_heads, hybrid_backbone=block_resnet(),
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
-    model.default_cfg = _cfg()
-    if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="https://dl.fbaipublicfiles.com/convit/convit_small.pth",
-            map_location="cpu", check_hash=True
-        )
-        model.load_state_dict(checkpoint)
-    return model
-
+    kwargs['hybrid_backbone'] = block_resnet()
+    return create_convit_model(
+        num_heads=9,
+        model_cls=VisionTransformer,
+        pretrained=pretrained,
+        ckpt_url="https://dl.fbaipublicfiles.com/convit/convit_small.pth",
+        **kwargs,
+    )
 
 @register_model
 def convit_base(pretrained=False, **kwargs):
-    num_heads = 16
-    kwargs['embed_dim'] *= num_heads
-    
-    model = VisionTransformerbase(
-        num_heads=num_heads, 
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
-    model.default_cfg = _cfg()
-    if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="https://dl.fbaipublicfiles.com/convit/convit_base.pth",
-            map_location="cpu", check_hash=True
-        )
-        model.load_state_dict(checkpoint)
-    return model
+    return create_convit_model(
+        num_heads=16,
+        model_cls=VisionTransformerbase,
+        pretrained=pretrained,
+        ckpt_url="https://dl.fbaipublicfiles.com/convit/convit_base.pth",
+        **kwargs,
+    )
 
-def load_state_dict(model, ckpt):
+def load_state_dict(model, ckpt, in_fc=15501):
     out_fc = 64500
     num_ftrs = model.head.in_features
     model.head = nn.Linear(num_ftrs, out_fc)
@@ -93,26 +91,20 @@ def load_state_dict(model, ckpt):
         else:
             new_state_dict[k] = v
     # import pdb; pdb.set_trace()
+    # del new_state_dict['patch_embed.proj.weight'], new_state_dict['patch_embed.proj.bias']
     model.load_state_dict(new_state_dict, strict = True)
     print('loading checkpoints weights \n')
-    model.head = nn.Linear(num_ftrs, 15501)
+    model.head = nn.Linear(num_ftrs, in_fc)
     del checkpoint, state_dict, new_state_dict
 
     return model
 
 @register_model
 def convit_base_patch(pretrained=False, **kwargs):
-    num_heads = 16
-    kwargs['embed_dim'] *= num_heads
-    
-    model = VisionTransformer(
-        num_heads=num_heads,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
-    model.default_cfg = _cfg()
-    if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="https://dl.fbaipublicfiles.com/convit/convit_base.pth",
-            map_location="cpu", check_hash=True
-        )
-        model.load_state_dict(checkpoint)
-    return model
+    return create_convit_model(
+        num_heads=16,
+        model_cls=VisionTransformer,
+        pretrained=pretrained,
+        ckpt_url="https://dl.fbaipublicfiles.com/convit/convit_base.pth",
+        **kwargs,
+    )
