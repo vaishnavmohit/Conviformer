@@ -1,5 +1,11 @@
 # Conviformer : Convolutionally guided Vision Transformers
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/conviformers-convolutionally-guided-vision/fine-grained-image-classification-on-4)](https://paperswithcode.com/sota/fine-grained-image-classification-on-4?p=conviformers-convolutionally-guided-vision)
+
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/conviformers-convolutionally-guided-vision/fine-grained-image-classification-on-5)](https://paperswithcode.com/sota/fine-grained-image-classification-on-5?p=conviformers-convolutionally-guided-vision)
+
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/conviformers-convolutionally-guided-vision/image-classification-on-inaturalist-2019)](https://paperswithcode.com/sota/image-classification-on-inaturalist-2019?p=conviformers-convolutionally-guided-vision)
+
 This repository contains PyTorch code for Conviformer with ConViT base. But this is generic approach and can be applied with any vision transformer. 
 
 Here is an architecture of the model:
